@@ -1,0 +1,786 @@
+%% LyX 2.3.6.2 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{report}
+\usepackage{lmodern}
+\renewcommand{\familydefault}{\rmdefault}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=0.5in,bmargin=0.5in,lmargin=0.5in,rmargin=0.5in}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+\usepackage{color}
+\usepackage{babel}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{setspace}
+\usepackage{esint}
+\usepackage{microtype}
+\onehalfspacing
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=true,pdfborder={0 0 0},pdfborderstyle={},backref=false,colorlinks=false]
+ {hyperref}
+\hypersetup{
+ citecolor=blue}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+\floatstyle{ruled}
+\newfloat{algorithm}{tbp}{loa}[chapter]
+\providecommand{\algorithmname}{Algorithm}
+\floatname{algorithm}{\protect\algorithmname}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{anyfontsize}
+
+
+
+
+
+
+
+%~~~~~~~~~~~~~~~~~~~~~Fancy ToC~~~~~~~~~~~~~~~~~~~~~~
+\usepackage{titletoc}
+\usepackage{titlesec}
+
+\definecolor{doc}{RGB}{0,60,110}
+
+
+\contentsmargin{0cm}
+\titlecontents{chapter}[0pc]
+{\addvspace{30pt}%
+\begin{tikzpicture}[remember picture, overlay]%
+\draw[fill=RoyalBlue,draw=RoyalBlue, rounded corners] (-4,-.1) rectangle (-0.15,.5);%
+\pgftext[left,x=-2.7cm,y=0.2cm]{\color{white}\Large \chaptertitlename\ \thecontentslabel};%
+\end{tikzpicture}\color{RoyalBlue}\large\bfseries}%
+{}
+{}
+{\hspace*{6pt}\titlerule\hspace*{6pt}\large\bfseries \thecontentspage
+\begin{tikzpicture}[remember picture, overlay]
+\draw[fill=doc!25,draw=RoyalBlue, rounded corners=0pt] (2pt,0) rectangle (6,0.1pt);
+\end{tikzpicture}}%
+\titlecontents{section}[2.4pc]
+{\addvspace{1pt}}
+{\contentslabel[\thecontentslabel]{2.4pc}}
+{}
+{\hfill\small \thecontentspage}
+[]
+\titlecontents{subsection}[4.8pc]
+{\addvspace{1.0pt}}
+{\contentslabel[\thecontentslabel]{2.4pc}}
+{}
+{\hfill\small\thecontentspage}
+[]
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\tableofcontents}{%
+\chapter*{%
+\vspace*{-20\p@}%
+\begin{tikzpicture}[remember picture, overlay]%
+\pgftext[right,x=15cm,y=0.2cm]{\color{RoyalBlue}\Huge \contentsname};%
+\draw[fill=RoyalBlue,draw=RoyalBlue, rounded corners=15pt] (13,-.75) rectangle (20,1);%
+\clip (13,-.75) rectangle (20,1);
+\pgftext[right,x=15cm,y=0.2cm]{\color{white}\Huge \contentsname};%
+\end{tikzpicture}}%
+\@starttoc{toc}}
+
+%~~~~~~~~~~~~~~~~~Hyperref Settings~~~~~~~~~~~~~~~~~~~~~~
+
+\usepackage{hyperref}
+\hypersetup{%
+    pdfborder = {0 0 0},
+    colorlinks,
+    citecolor=red,
+    filecolor=green,
+    linkcolor=RoyalBlue,
+    urlcolor=cyan!50!black!90
+}
+
+
+%......Sectioning...%
+\def\chpcolor{RoyalBlue}
+\def\chpcolortxt{RoyalBlue}
+\def\sectionfont{\LARGE}
+
+\setcounter{secnumdepth}{2}
+
+
+%Section:
+\def\@sectionstrut{\vrule\@width\z@\@height12.5\p@}
+\def\@makesectionhead#1{%
+  {\par\vspace{20pt}%
+   \parindent 0pt\raggedleft\sectionfont
+   \colorbox{\chpcolor}{%
+     \parbox[t]{90pt}{\color{white}\@sectionstrut\@depth4.5\p@\hfill
+       \ifnum\c@secnumdepth>\z@\thesection\fi}%
+   }%
+   \begin{minipage}[t]{\dimexpr\textwidth-90pt-2\fboxsep\relax}
+   \color{\chpcolortxt}\@sectionstrut\hspace{5pt}#1
+   \end{minipage}\par
+   \vspace{10pt}%
+  }
+}
+\def\section{\@afterindentfalse\secdef\@section\@ssection}
+\def\@section[#1]#2{%
+  \ifnum\c@secnumdepth>\m@ne
+    \refstepcounter{section}%
+    \addcontentsline{toc}{section}{\protect\numberline{\thesection}#1}%
+  \else
+    \phantomsection
+    \addcontentsline{toc}{section}{#1}%
+  \fi
+  \sectionmark{#1}%
+  \if@twocolumn
+    \@topnewpage[\@makesectionhead{#2}]%
+  \else
+    \@makesectionhead{#2}\@afterheading
+  \fi
+}
+\def\@ssection#1{%
+  \if@twocolumn
+    \@topnewpage[\@makesectionhead{#1}]%
+  \else
+    \@makesectionhead{#1}\@afterheading
+  \fi
+}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{microtype}
+
+
+
+\makeatletter
+\newenvironment{breakablealgorithm}
+  {% \begin{breakablealgorithm}
+   \begin{center}
+     \refstepcounter{algorithm}% New algorithm
+     \hrule height.8pt depth0pt \kern2pt% \@fs@pre for \@fs@ruled
+     \renewcommand{\caption}[2][\relax]{% Make a new \caption
+       {\raggedright\textbf{\ALG@name~\thealgorithm} ##2\par}%
+       \ifx\relax##1\relax % #1 is \relax
+         \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##2}%
+       \else % #1 is not \relax
+         \addcontentsline{loa}{algorithm}{\protect\numberline{\thealgorithm}##1}%
+       \fi
+       \kern2pt\hrule\kern2pt
+     }
+  }{% \end{breakablealgorithm}
+     \kern2pt\hrule\relax% \@fs@post for \@fs@ruled
+   \end{center}
+  }
+\makeatother
+
+\makeatother
+
+\begin{document}
+\pagestyle{empty}
+\begin{tikzpicture}[overlay,remember picture]
+\fill[black!2] (current page.south west) rectangle (current page.north east);
+\begin{scope}[transform canvas ={rotate around ={45:($(current page.north west)+(-.5,-6)$)}}]
+\shade[rounded corners=18pt, left color=Dandelion, right color=Dandelion!40] ($(current page.north west)+(-.5,-6)$) rectangle ++(9,1.5);
+\end{scope}
+\begin{scope}[transform canvas ={rotate around ={45:($(current page.north west)+(.5,-10)$)}}]
+\shade[rounded corners=18pt, left color=lightgray,right color=lightgray!60] ($(current page.north west)+(0.5,-10)$) rectangle ++(15,1.5);
+\end{scope}
+\begin{scope}[transform canvas ={rotate around ={45:($(current page.north west)+(0.5,-10)$)}}]
+\shade[rounded corners=8pt, left color=lightgray] ($(current page.north west)+(1.5,-9.55)$) rectangle ++(7,.6);
+\end{scope}
+\begin{scope}[transform canvas ={rotate around ={45:($(current page.north)+(-1.5,-3)$)}}]
+\shade[rounded corners=12pt, left color=orange!80, right color=orange!60] ($(current page.north)+(-1.5,-3)$) rectangle ++(9,0.8);
+\end{scope}
+\begin{scope}[transform canvas ={rotate around ={45:($(current page.north)+(-3,-8)$)}}]
+\shade[rounded corners=28pt, left color=red!80, right color=red!80] ($(current page.north)+(-3,-8)$) rectangle ++(15,1.8);
+\end{scope}
+\begin{scope}[transform canvas ={rotate around ={45:($(current page.north west)+(4,-15.5)$)}}]
+\shade[rounded corners=25pt, left color=RoyalBlue
+,right color=Emerald] ($(current page.north west)+(4,-15.5)$) rectangle ++(30,1.8);
+\end{scope}
+\begin{scope}[transform canvas ={rotate around ={45:($(current page.north west)+(13,-10)$)}},]
+\shade[rounded corners=22pt, left color=orange, right color=Dandelion] ($(current page.north west)+(13,-10)$) rectangle ++(15,1.5);
+\end{scope}
+\begin{scope}[transform canvas ={rotate around ={45:($(current page.north west)+(18,-8)$)}},]
+\shade[rounded corners=8pt, left color=lightgray] ($(current page.north west)+(18,-8)$) rectangle ++(15,0.6);
+\end{scope}
+\begin{scope}[transform canvas ={rotate around ={45:($(current page.north west)+(19,-5.65)$)}},]
+\shade[rounded corners=12pt, left color=black] ($(current page.north west)+(19,-5.65)$) rectangle ++(15,0.8);
+\end{scope}
+\begin{scope}[transform canvas ={rotate around ={45:($(current page.north west)+(20,-9)$)}}]
+\shade[rounded corners=20pt, left color=OrangeRed, right color=red!80] ($(current page.north west)+(20,-9)$) rectangle ++(14,1.2);
+\end{scope}
+\draw[ultra thick,gray] ($(current page.center)+(5,2)$) -- ++(0,-3cm) node[midway,left=0.25cm,text width=5cm,align=right,black!75]{{\fontsize{12}{12} \selectfont \bf AN \\ INTRODUCTION TO  \\[5pt]  BAYESIAN ANALYSIS}} node[midway,right=0.25cm,text width=6cm,align=left,orange]{{\fontsize{30}{50} \selectfont MTH535A}};
+\node at ($(current page.center)+(0,-3)$) {{\fontsize{17}{17} \selectfont \bf A Comparative study of Bayesian approach to case-control studies}};
+\node at ($(current page.center)+(0,-4)$) {{\fontsize{17}{17} \selectfont \bf  with errors in covariables}};
+\node[text width=20cm,align=center] at ($(current page.center)+(0,-6.5)$) {{\fontsize{12}{12} \selectfont \textcolor{RoyalBlue}{ \bf Soumya Paul, Sankhadeep Mitra, Sampriti Dutta}} \\[3pt] \emph{Under the guidance of} \\ \selectfont \textcolor{Emerald}{Prof. Arnab Hazra} \\  Department of Mathematics and Statistics, \\[3pt] Indian Institute of Technology Kanpur};
+\node at ($(current page.center)+(0,-10.5)$) {{\includegraphics[width=4cm,height=4cm,keepaspectratio]{IIT_Kanpur_Logo}}};
+\end{tikzpicture}
+
+\newpage{}
+
+\tableofcontents{}
+
+\pagebreak{}
+\begin{abstract}
+We would like to develop a Bayesian methodology for the analysis of
+case-control data with covariate uncertainty. Pretending that the
+distribution of imprecisely measured covariates is discrete on a heuristically
+chosen support set provides a method that is relatively easy to implement
+and applicable to a variety of study designs. Further development
+of the method highlights the interplay between retrospective and prospective
+analyses. We illustrate this method with simulated data. 
+\end{abstract}
+
+\section{Introduction}
+
+A \emph{case-control} study is a study of a medical condition/disease
+by comparing patients with the condition/disease (\emph{\textcolor{Emerald}{"cases"}})
+to otherwise similar patients (\emph{\textcolor{Emerald}{"control"}})
+who do not have the condition/disease. It is commonly used to identify
+possible contributing factors. Case-control studies are an important
+and useful method for studying health outcomes, and many methods have
+been developed to analyze case-control data of exposed subjects between
+cases and controls. 
+
+Our analysis seeks to examine the effects of covariates on disease
+status using samples collected as a function of disease status. In
+many cases, some covariates cannot be measured precisely. It is also
+well known that an analysis that treats inaccurate measurements as
+accurate can lead to distorted results. In this paper, we presented
+a Bayesian methodology to account for covariate measurement errors
+in case-control analysis. 
+
+As of late, Bayesian strategies have been effectively applied to a
+wide run of measurment error issues \emph{\cite{Carroll1999,Dellaportas1995BAYESIANAO,Mallick1996,1995,Richardson_1993}.}
+The victory of these strategies stems from a direct conceptual and
+computational approach to averaging over unobserved quantities such
+as the genuine covariate values, within the posterior distribution. 
+
+If the precise covariates are denoted by $X$, and disease status
+by $D$ (where $D=0$ and $D=1$ corresponds to disease free and diseased
+respectively), then a case\textendash control study involves sampling
+\textquotedblleft controls\textquotedblright{} from $X\mid D=0$ and
+\textquotedblleft cases\textquotedblright{} from $X\mid D=1$. Therefore,
+an exact analysis requires a likelihood based on the conditional distribution
+of $X$ given $D$, the so-called \textbf{\emph{retrospective model}}. 
+
+However, the standard approach to analysis is to pretend that the
+data were collected prospectively and use likelihood based on the
+\textbf{\emph{prospective model}} $D|X$ that is usually assumed to
+follow a logistic regression model. A justification for this is provided
+by\textcolor{yellow}{{} }\emph{\cite{PRENTICE_1979}}. In the case of
+measurement error, the imprecise measurement $W$ stands in for $X$. 
+
+Here we used an approach that derives the posterior distribution directly
+from the retrospective model. In fact, as an approximation of the
+retrospective posterior distribution, we get the prospective posterior
+distribution. This sheds new light on the interplay of retrospective
+and prospective analyses. 
+
+This method can be applied to different measurement error scenarios.
+One scenario is \textbf{\emph{validation design}} where both $W$
+and $X$ are measured for some subjects (full data) and only $W$
+for the rest (reduced data). If the exact form of the distribution
+of $W\mid X,D$ contains unknown parameters, the full data will contain
+information about these parameters. Therefore, both full and reduced
+data contain information about the relationship between $X$ and $D$. 
+
+Another scenario arises when the distribution of $W\mid X,D$ is completely
+known from an external study and the case-control study consists only
+of reduced data. This situation is called \textbf{\emph{external validation}}\emph{.}
+For our project, we will limit ourselves to external validation. 
+
+The approach of \emph{\cite{Gustafson2000}} contains the normal retrospective
+model for $X\mid D$ and the normal measurement error model for $W\mid X,D$.
+The assumption of normal distribution is limited in scope. The approach
+described here is much more widely applicable. 
+
+\emph{Section 0.2} describes the model and derives some variants of
+the posterior and prior distributions of interest. \emph{Section 0.5}
+test the method on simulated data. \emph{Sections 0.3} and \emph{0.4}
+details the Markov Chain Monte Carlo (MCMC) scheme used.
+
+\section{Methodology}
+
+Suppose for a particular individual,
+\begin{center}
+\[
+D=\begin{cases}
+1 & \textrm{if the individual is diseased}\\
+0 & \textrm{if the individual is disease-free}
+\end{cases}\textrm{ \textrm{and }}\mathbf{\boldsymbol{X}}=\left(X_{1},X_{2},....,X_{p}\right)\;\textrm{: a vector of \ensuremath{p} covariates.}
+\]
+\par\end{center}
+
+Generally, the scale at which measurement error is additive may not
+be same as the scale at which the covariate is related with the disease
+model for imprecisely measured covariates $\left(\boldsymbol{W}\right)$. Therefore,
+we assume that there exists a suitable transformation $s\left(.\right)$
+on $\boldsymbol{X}$ such that the measurement error has an additive
+effect on the components of $\boldsymbol{X}$.
+
+Our analysis requires the likelihood based on the retrospective model.
+The standard approach to analysis, is to pretend the data are sampled
+\emph{prospectively} and use a likelihood based on $D|\boldsymbol{X}$,
+which is typically assumed to follow a \emph{logistic regression model}.
+Thus we specify the disease's \emph{prospective model}  as
+
+\begin{equation}
+\log\left(\frac{\mathbb{P}(D=1|\boldsymbol{X}=\boldsymbol{x})}{\mathbb{P}(D=0|\boldsymbol{X}=\boldsymbol{x})}\right)=\alpha^{*}+\beta^{T}s\left(\boldsymbol{x}\right)\label{eq:2.1}
+\end{equation}
+
+, where $s\left(\boldsymbol{x}\right)=\left(s_{1}\left(x_{1}\right),s_{2}\left(x_{2}\right),....,s_{p}\left(x_{p}\right)\right)^{T}$,
+with $s_{i}:\mathbb{R}\rightarrow\mathbb{R}$ being a known function.
+
+We are interested in knowing the value of the parameter set $\left\{ \alpha^{*},\beta_{1},\beta_{2},....,\beta_{p}\right\} $. 
+
+The data are collected retrospectively, i.e., the \emph{controls}
+comprise a sample of size $n_{1}$ drawn from the distribution of
+$\boldsymbol{X}\mid D=0$, while the \emph{cases} comprise a sample
+of size $n_{2}$ drawn from the distribution of $\boldsymbol{X}\mid D=1.$
+For future use we define the total sample size as $n=n_{1}+n_{2}$,
+and the sampling fractions as $r_{i}={\displaystyle \frac{n_{i}}{n};\;i=1,2}$
+
+In terms of log-odds there is a fundamental link between \emph{retrospective}
+and \emph{prospective} model:
+
+\begin{eqnarray}
+\log\left(\frac{f\left(\boldsymbol{x}\mid D=1\right)}{f\left(\boldsymbol{x}\mid D=0\right)}\right) & = & \log\left(\frac{\mathbb{P}\left(D=1|\boldsymbol{X}=\boldsymbol{x}\right)f\left(\boldsymbol{x}\right)\mathbb{P}\left(D=0\right)}{\mathbb{P}\left(D=0|\boldsymbol{X}=\boldsymbol{x}\right)f\left(\boldsymbol{x}\right)\mathbb{P}\left(D=1\right)}\right)\nonumber \\
+ & = & \log\left(\frac{\mathbb{P}\left(D=1|\boldsymbol{X}=\boldsymbol{x}\right)}{\mathbb{P}\left(D=0|\boldsymbol{X}=\boldsymbol{x}\right)}\right)-\log\left(\frac{\mathbb{P}\left(D=1\right)}{\mathbb{P}\left(D=0\right)}\right)\nonumber \\
+ & = & \alpha^{*}+\beta^{T}s\left(\boldsymbol{x}\right)-\log\left(\frac{\mathbb{P}\left(D=1\right)}{\mathbb{P}\left(D=0\right)}\right)\nonumber \\
+ & = & \alpha+\beta^{T}s\left(\boldsymbol{x}\right)\textrm{ where }\alpha=\alpha^{*}-\log\left(\frac{\mathbb{P}\left(D=1\right)}{\mathbb{P}\left(D=0\right)}\right)\label{eq:2.2}
+\end{eqnarray}
+
+Using the retrospective data we cannot estimate $\alpha^{*}$ without
+knowing the value of $\mathbb{P}\left(D=1\right)$.
+
+The equation (\ref{eq:2.2}) can be rewritten as equation which is
+parametrized according to $\left(\alpha,\beta,h\right)$
+\[
+f_{\boldsymbol{X}\mid D}\left(\boldsymbol{x}\mid d\right)=\exp\left(d\left(\alpha+\beta^{T}s\left(\boldsymbol{x}\right)\right)\right)h\left(\boldsymbol{x}\right);\;\textrm{where \ensuremath{d=0,1} and \ensuremath{h\left(x\right):} density of \ensuremath{X\mid D=0}}
+\]
+
+If $d=1$, then we get the density of $\boldsymbol{X}\mid D$, i.e.,
+\begin{eqnarray}
+f_{\boldsymbol{X}\mid D}\left(x\mid d=1\right) & = & \exp\left(\left(\alpha+\beta^{T}s\left(\boldsymbol{x}\right)\right)\right)h\left(\boldsymbol{x}\right)\label{eq:2.3}\\
+ & \textrm{and}\nonumber \\
+\intop_{-\infty}^{\infty}f_{\boldsymbol{X}\mid D}\left(\boldsymbol{x}\mid d=1\right)d\boldsymbol{x} & = & 1\nonumber \\
+\implies\intop_{-\infty}^{\infty}\exp\left(\alpha+\beta^{T}s\left(\boldsymbol{x}\right)\right)h\left(\boldsymbol{x}\right)d\boldsymbol{x} & = & 1\nonumber \\
+\implies E_{h}\left(\exp\left(\alpha+\beta^{T}s\left(\boldsymbol{x}\right)\right)\right) & = & 1\label{eq:2.4}
+\end{eqnarray}
+
+We have equation (\ref{eq:2.3}) with constraint (\ref{eq:2.4}) and
+three unknown parameters $\left(\alpha,\beta,h\right)$. So, $\alpha$
+can be written as a function of $\beta$ and $h$ i.e. $\alpha=\alpha\left(\beta,h\right)$.
+
+Let's talk about measurement error.Suppose we have only one covariate
+$\left(p=1\right)$ for which the presence of measurement error is
+externally validated i.e. we have observed $W$ where the actual value
+$X$ is unobserved for all subjects and the measurement error density,
+$f(w|x,d)$ is completely specified. Instead of restricting ourselves
+to a specific form of the density, it is useful for what follows to
+define $\tau^{2}=Var(W|X,D)$ as the variance of imprecise measurement
+given actual measurement. Here, we presume that $D$ has no effect
+on the conditional variance. More broadly, measurement error is frequently
+considered to be \emph{nondifferential}, in which case the conditional
+distribution of $W|X,D$ is independent of $D$. 
+
+Now, the joint distribution of $\left(W,X,D\right)$ can be presented
+as
+\[
+f\left(w,x,d\right)=f\left(w\mid x,d\right)f\left(x\mid d\right)f\left(d\right);\textrm{ where \ensuremath{f\left(x\mid d\right)} depends on \ensuremath{h} and \ensuremath{\beta} }
+\]
+
+For a given prior $f\left(\beta,h\right)$ the posterior distribution
+of $\left(X,\beta,h\right)$ is
+\begin{eqnarray*}
+f(x,\beta,h|w,d) & \propto & f(w,x,d|\beta,h)f(\beta,h)\\
+ & = & \left(\prod_{i=1}^{n}f\left(w_{i}\mid x_{i},d_{i}\right)f\left(x_{i}\mid d_{i},\beta,h\right)f\left(d_{i}\mid\beta,h\right)\right)f\left(\beta,h\right)
+\end{eqnarray*}
+
+Usually $\beta$ is the parameter of interest and density $h$\textcolor{yellow}{{}
+}is the nuisance parameter. As per \emph{\cite{BUONACCORSI1990}},
+If we assume $h$ belongs to a simple parametric family, there is
+a risk of misspecifying the model. On the other hand, the flexible
+model of $h$ proposed by \emph{\cite{Muller_1997,Muller_1999}} failed
+to completely eliminate erroneous specifications, leading to complex
+model-tuning procedures. To find a compromise between simplicity and
+flexibility, here we consider approximating $h$ by a discrete distribution.
+ 
+
+Instead of modeling $h$ itself as a discrete distribution, it makes
+sense to reparameterize from $\left(\beta,h\right)$ to $\left(\beta,g\right)$,
+where the density of $X$ is given by 
+\begin{equation}
+g\left(x\right)=r_{1}h\left(x\right)+r_{2}\exp\left\{ \alpha\left(\beta,h\right)+\beta s\left(x\right)\right\} h\left(x\right)\label{eq:2.6}
+\end{equation}
+
+Suppose $\lambda$ parameterizes $g$ and for simplicity, assume $\beta$
+and $\lambda$ are a priori independent. Then (\ref{eq:2.5}) reduces
+to
+\begin{eqnarray}
+f(x,\beta,\lambda|w,d) & \propto & \left(\prod_{i=1}^{n}f\left(w_{i}\mid x_{i},d_{i}\right)f\left(x_{i}\mid d_{i},\beta,\lambda\right)f\left(d_{i}\mid\beta,\lambda\right)\right)f\left(\beta\right)f\left(\lambda\right)\label{eq:2.7}
+\end{eqnarray}
+
+To approximate $g$ with a discrete distribution, we need to specify
+a grid of points to act as supports. Let's say the grid-points are
+\[
+z\left[1\right]<z\left[2\right]<........<z\left[m\right]
+\]
+, and define $\theta=\left\{ \theta_{1},\theta_{2},....,\theta_{n}\right\} $
+to match the sample drawn from distribution of $X$ to the grid via
+\[
+x_{i}=z\left[\theta_{i}\right]\;;\theta_{i}\in\left\{ 1,2,.....,m\right\} 
+\]
+
+Further, let $\lambda_{j}$ be the probability that $g$ assigns to
+$z\left[j\right]$, and say that $\lambda$ has a uniform, or $Dirichlet(1,...,1)$,
+prior on the $m$-dimensional probability simplex. Under this formulation,
+(\ref{eq:2.7}) becomes
+\begin{eqnarray}
+f(\theta,\beta,\lambda|w,d) & \propto & \left(\prod_{i=1}^{n}f\left(w_{i}\mid z\left[\theta_{i}\right],d_{i}\right)f\left(z\left[\theta_{i}\right]\mid d_{i},\beta,\lambda\right)f\left(d_{i}\mid\beta,\lambda\right)\right)f\left(\beta\right)\label{eq:2.8}
+\end{eqnarray}
+
+Strategy for choosing grid points $z\left[1\right],z\left[2\right],........,z\left[m\right]$
+depend on the nature of the data at hand . 
+
+For the measurement error model if we assume additive relationship
+between precise and imprecise measurements as
+
+\begin{equation}
+W=X+u\;;E\left(u\right)=0,Var\left(u\right)=\tau^{2}\label{eq:2.9}
+\end{equation}
+
+Then 
+\[
+E\left(W|X\right)=X,\;\textrm{and }Var\left(W|X\right)=\tau^{2}
+\]
+
+When $\tau=0$, the distribution of $W|X,D$ is degenerated at the
+point $x$. We simply take the grid-points to be the observed $x$
+values.
+
+When $\tau>0$,in the case of external validation there are competing
+desiderata in choosing the $m$ grid-points. On the one hand, we want
+m to be small in hopes of getting reasonable accuracy in estimating
+$g$.  But on the other hand, to properly update the $x_{i}$ values,
+we need a fine enough grid to correctly capture the shape of $f(w_{i}|x_{i},d_{i})$
+as a function of $x_{i}$. According to \cite{Gustafson_2002} we
+will choose an equally spaced grid, with 
+\[
+z\left[1\right]=\min_{i}\left\{ w_{i}\right\} -2.5\tau,z\left[m\right]=\max_{i}\left\{ w_{i}\right\} +2.5\tau\textrm{ with a spacing of \ensuremath{\tau}/4.}
+\]
+ 
+
+\section{MCMC Scheme}
+
+Our main interest is to draw samples from $f(\theta,\beta,\lambda|w,d)$
+as presented in (\ref{eq:2.8}) using MCMC scheme.
+
+For the measurement error model 
+\[
+W\mid X\sim N\left(X,\tau^{2}\right)
+\]
+
+$X\mid D,\beta,\lambda$ is approximated through $z\left[\theta\right]$ 
+
+\[
+logit\left\{ \mathbb{P}\left(D=1\mid X\right)\right\} =-3+0.5\exp\left(X\right)
+\]
+
+So, true value of $\beta$ is 0.5. The prior for $\beta$ is 
+\[
+\beta\sim N\left(0,100^{2}\right)
+\]
+
+Here it is not possible to specify a conditionally conjugate prior.
+Also we assumed the candidate distribution to be normal which is symmetric.
+So, we have used Metropolis sampling technique to replace draws from
+the exact full conditional distribution with the draw from a candidate
+distribution followed by an accept or reject state. 
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\State {Initialize $\boldsymbol{\theta}^{\left(0\right)}=\left(\theta_{1}^{\left(0\right)},\theta_{2}^{\left(0\right)},.......,\theta_{p}^{\left(0\right)}\right)$}
+\For{$s \gets 1$ to $S$} 
+	\For{$j \gets 1$ to $p$}  
+        \State {sample $\theta_{j}^{*}\sim q_{j}\left(\theta_{j}\mid\theta_{j}^{\left(s-1\right)}\right)$ for symmetric $q_j$}
+		\State {set  $\boldsymbol{\theta}^{*}=\left(\theta_{1}^{\left(s\right)},...,\theta_{j-1}^{\left(s\right)},\theta_{j}^{*},\theta_{j+1}^{\left(s-1\right)},...,\theta_{p}^{\left(s-1\right)}\right)$ }
+		\State{set $\displaystyle R=\frac{f\left(\boldsymbol{Y}\mid\theta^{*}\right)\pi\left(\theta^{*}\right)}{f\left(\boldsymbol{Y}\mid\theta^{\left(s-1\right)}\right)\pi\left(\theta^{\left(s-1\right)}\right)}$ }
+		\State {sample $U \sim \textrm{uniform}(0,1)$}
+		\If {$U<R$}
+			\State {set $\theta_{j}^{\left(s\right)}=\theta_{j-1}^{*}$}	
+		\Else
+			\State {set $\theta_{j}^{\left(s\right)}=\theta_{j}^{\left(s-1\right)}$}
+		\EndIf
+	\EndFor
+\EndFor
+\end{algorithmic}
+
+\caption{\textbf{Metropolis Algorithm}}
+\end{algorithm}
+
+
+\section{Computation}
+
+Let us assume that the precise measurement $X\sim N\left(\mu,\tau^{2}\right)$.
+By equation (\ref{eq:2.9}) 
+\[
+W\mid X\sim N\left(X,\tau^{2}\right)
+\]
+
+The model for $D\mid X$ is 
+
+\begin{equation}
+logit\left\{ \mathbb{P}\left(D=1\mid X\right)\right\} =\alpha+\beta\exp\left(X\right)\label{eq:4.1}
+\end{equation}
+
+We are interested in the posterior distribution of $X,\beta\mid W,D$.
+
+\begin{eqnarray}
+f(x,\beta|w,d) & \propto & f\left(w\mid x,d,\beta\right)f\left(x,d,\beta\right)\nonumber \\
+ & = & f\left(w\mid x,d\right)f\left(x\mid d,\beta\right)f\left(d,\beta\right)\nonumber \\
+ & = & f\left(w\mid x,d\right)f\left(x\mid d\right)f\left(d\mid\beta\right)f\left(\beta\right)\nonumber \\
+ & = & \left(\prod_{i=1}^{n}f\left(w_{i}\mid x_{i},d_{i}\right)f\left(x_{i}\mid d_{i}\right)f\left(d_{i}\mid\beta\right)\right)f\left(\beta\right)\label{eq:4.2}
+\end{eqnarray}
+
+where 
+\[
+f\left(w_{i}\mid x_{i},d_{i}\right)=\frac{1}{\sqrt{2\pi}\tau}\exp\left(-\frac{\left(w_{i}-x_{i}\right)^{2}}{2\tau^{2}}\right)
+\]
+
+The expressions of $f\left(x_{i}\mid d_{i}\right)$ and $f\left(d_{i}\mid\beta\right)$
+are derived as follows.
+
+The $m$ grid-points $z\left[j\right]$'s are created as mentioned
+in Section 0.2. To each grid-point we associate probability $\lambda_{j}$,
+where $\left(\lambda_{1},...,\lambda_{m}\right)\sim Dirichlet\left(1,1,...,1\right)$.
+We approximate the unobserved precise covariate $X$ by the grid-points.
+So, $f\left(x\mid d\right)$ is a PMF with the $m$ grid-points as
+the support.
+
+\begin{equation}
+f\left(x_{j}\mid d_{j}\right)=\frac{\lambda_{j}f\left(w_{j}\mid x_{j}\right)}{\sum_{j=1}^{m}\lambda_{j}f\left(w_{j}\mid x_{j}\right)},\;j=1\left(1\right)m\label{eq:4.3}
+\end{equation}
+
+Note that here we have $m$ $x_{j}$'s and $w_{j}$'s, whereas equation
+(\ref{eq:4.2}) has $n$ many $x_{i}$'s and $w_{i}$'s. To overcome
+this issue we simulate $w_{j}$ from $N\left(z\left[j\right],\tau^{2}\right),\;j=1,2,...,m$
+and calculate $f\left(x_{j}\mid d_{j}\right)$. Then we generate a
+sample of size $n$ with replacement from the distribution given by
+(\ref{eq:4.3}).
+
+The posterior of $X$ is given by 
+\begin{equation}
+f\left(x\mid w,d\right)\propto\prod_{i=1}^{n}f\left(w_{i}\mid x_{i},d_{i}\right)f\left(x_{i}\mid d_{i}\right)\label{eq:4.4}
+\end{equation}
+
+To draw samples from (\ref{eq:4.4}) we implemented MCMC using Metropolis
+sampling algorithm.
+
+From equation (\ref{eq:4.1})
+\begin{eqnarray}
+logit\left\{ \mathbb{P}\left(d_{i}=1\mid\bar{x_{i}}\right)\right\}  & = & \alpha+\beta\exp\left(\bar{x_{i}}\right)\nonumber \\
+\implies\frac{\mathbb{P}\left(d_{i}=1\right)}{\mathbb{P}\left(d_{i}=0\right)} & = & \exp\left(\alpha+\beta\exp\left(\bar{x_{i}}\right)\right)\nonumber \\
+\implies\frac{p_{i}}{1-p_{i}} & = & \exp\left(\alpha+\beta\exp\left(\bar{x_{i}}\right)\right)\;\textrm{where \ensuremath{p_{i}=}\ensuremath{\mathbb{P}\left(d_{i}=1\right)}}\nonumber \\
+\implies p_{i} & = & \frac{\exp\left(\alpha+\beta\exp\left(\bar{x_{i}}\right)\right)}{1+\exp\left(\alpha+\beta\exp\left(\bar{x_{i}}\right)\right)}\label{eq:4.5}
+\end{eqnarray}
+
+where $\bar{x_{i}}$ is the post burn-in sample mean of $X_{i}$. 
+
+So, 
+\[
+d_{i}\mid\beta\sim Ber\left(p_{i}\right)
+\]
+
+The posterior of $\beta$ is given by 
+\begin{equation}
+f\left(\beta\mid w,d\right)\propto\left(\prod_{i=1}^{n}f\left(d_{i}\mid\beta\right)\right)f\left(\beta\right)\label{eq:4.6}
+\end{equation}
+
+, where $f\left(\beta\right)$ is PDF of $N\left(0,100^{2}\right)$
+
+To draw samples from (\ref{eq:4.6}), again we implemented Metropolis
+sampling algorithm.
+
+\begin{breakablealgorithm}
+\caption{Computation}
+\begin{algorithmic}[1]
+\State{Set $\tau \in \left\{ 0,0.25,0.5,0.75\right\} $, $\mu=2$, $\alpha=-3$, $\beta=0.5$ and $n \in \left\{30,60,120,160\right\}$}
+\State {Generate $\boldsymbol{X}=\left(X_{1},X_{2},..,X_{n}\right)$ such that $X_i \sim N \left(\mu,\tau^2 \right)$ ($n$ even)}
+\State {Generate $\boldsymbol{D}=\left(D_{1},D_{2},..,D_{n}\right)$ with $n/2$ 0's and $n/2$ 1's such that}
+	\If{$\displaystyle \frac{\exp\left(\alpha+\beta\exp\left(X\right)\right)}{1+\exp\left(\alpha+\beta\exp\left(X\right)\right)}<\frac{1}{2}$}
+		\State {$D=0$}
+	\Else
+		\State {$D=1$}
+	\EndIf
+\State {Generate $\boldsymbol{W}=\left(W_{1},W_{2},..,W_{n}\right)$ such that}
+\For{$i \gets 1$ to $n$}
+	\State {$W_i \sim N \left(X_i,\tau^2 \right)$}
+\EndFor
+\State {Generate $m$ gridpoints $Z[1]<Z[2]<...<Z[m]$} such that
+\For{$j \gets 1$ to $m$}
+	\State {set $\displaystyle Z[j]=\min_{i}\left\{ w_{i}\right\} -2.5\tau+(j-1)\frac{\tau}{4}$}
+\EndFor
+\State {Draw $\left(\lambda_{1},\lambda_{2},...,\lambda_{m}\right) \sim Dirichlet (1, 1, ..., 1).$}
+\State {Generate $\boldsymbol{W}=\left(W_{1},W_{2},..,W_{m}\right)$ and ${f}(\boldsymbol{w})=\left(f(W_1),f(W_2),..,f(W_m)\right)$such that}
+\For{$j \gets 1$ to $m$}
+	\State {Generate $W_j \sim N \left(Z[j],\tau^2 \right)$}
+	\State {set $\displaystyle f(W_j)=\frac{1}{\tau\sqrt{2\pi}}\exp\left(-\frac{\left(W_j-Z\left[j\right]\right)^{2}}{2\tau^{2}}\right)$}
+\EndFor
+\State {Generate $\boldsymbol{p}=(p_1,p_2,...,p_m)$such that}
+\For{$j \gets 1$ to $m$}
+	\State {set $\displaystyle p_j=\frac{\lambda_{j}f\left(w_{j}\right)}{\sum_{k=1}^{m}\lambda_{j}f\left(w_{j}\right)}$}
+\EndFor
+\Function{CloseProb}{$a$}
+	\State{return the probability of closest point of $a$}
+\EndFunction
+\Function{logPosteriorX}{$x$}
+	\State{return log-Posterior of $x$}
+\EndFunction
+\State{set $S=10000$}
+\State{Apply \emph{Metropolis Sampling} with initial value $\boldsymbol{X}^{(0)}=\boldsymbol{W}$, $p=n$ and candidate: $N \left(\boldsymbol{X}^{(s-1)},\tau^2 \right)$  }
+\State{Consider samples $\boldsymbol{X}^{*}=\left(X_{1}^{*},X_{2}^{*},...,X_{n}^{*}\right)$ after burn-in period of 2000 samples}
+\State{Obtain $\displaystyle \widehat{E\left(X\right)}=\frac{1}{8000n}\sum_{i=1}^{8000}\sum_{j=1}^{n}X_{ij}^{*}$, $\displaystyle \widehat{Var\left(X\right)}=\frac{1}{8000n}\sum_{i=1}^{8000}\sum_{j=1}^{n}\left(X_{ij}^{*}-\bar{X}_{j}^{*}\right)^{2}$, Mean distance $=\lVert \boldsymbol{X}-\bar{\boldsymbol{X}}^{*} \rVert$ where $\bar{\boldsymbol{X}}^{*} =\left(\bar{X}_{1}^{*},\bar{X}_{2}^{*},...,\bar{X}_{n}^{*}\right)$}
+\Function{logPosteriorBeta}{$\beta$}
+	\State{return log-Posterior of $\beta$}
+\EndFunction
+\State{Apply \emph{Metropolis Sampling} with initial value $\beta^{(0)}=50$, $p=1$ and candidate: $N \left(\beta^{(s-1)},100^2 \right)$  }
+\State{Consider samples $\beta^{*}$ after burn-in period of 2000 samples}
+\State{Obtain $\displaystyle \widehat{E\left(\beta\right)}=\frac{1}{8000}\sum_{i=1}^{8000}\beta_{i}^{*}$, $\displaystyle \widehat{MSE\left(\beta\right)}=\frac{1}{8000}\sum_{i=1}^{8000}\left(\beta_{i}^{*}-\beta\right)^{2}$, $\widehat{Var\left(\beta\right)}=\frac{1}{8000}\sum_{i=1}^{n}\left(\beta_{i}^{*}-\widehat{E\left(\beta\right)}\right)^{2}$}
+\State{Compute $95\%$ credible interval  $\left( \displaystyle \widehat{E\left(\beta\right)}-z_{0.025}\sqrt{\frac{\widehat{Var\left(\beta\right)}}{8000}},\widehat{E\left(\beta\right)}+z_{0.025}\sqrt{\frac{\widehat{Var\left(\beta\right)}}{8000}}\right)$}
+\State{Repeat (Step 2) to (Step 35) 10 times and obtain Coverage probability=Proportion of times credible interval contains the true value of $\beta$.} 
+\end{algorithmic}
+\end{breakablealgorithm}
+
+\section{Results}
+
+\subsection{Scenario A}
+\begin{center}
+\begin{table}[H]
+\begin{centering}
+\begin{tabular}{ccc}
+\toprule 
+$n_{i}$ & $\widehat{E\left(\beta\right)}$ & $\widehat{MSE\left(\beta\right)}$\tabularnewline
+\midrule
+\midrule 
+15 & 0.5649 & 0.0128\tabularnewline
+\midrule 
+30 & 0.5594 & 0.0073\tabularnewline
+\midrule 
+60 & 0.5273 & 0.0034\tabularnewline
+\midrule 
+120 & 0.5116 & 0.0019\tabularnewline
+\bottomrule
+\end{tabular}
+\par\end{centering}
+\caption{Simulation results for scenario A. This scenario involves no measurement
+error and various sample sizes (with $n_{1}=n_{2}$). The results
+are based on 10 replicated data sets. The reported MSE is the MSE
+for $E(\beta\mid data)$. }
+\end{table}
+\par\end{center}
+
+\subsection{Scenario B}
+
+Simulation results for scenario B for various values of $\tau$ are
+considered. This scenario involves measurement error and fixed sample
+size ( with $n_{1}=n_{2}=80$). The results are based on 10 replicated
+data sets.
+\begin{center}
+\begin{table}[H]
+\begin{centering}
+\begin{tabular}{cccc}
+\toprule 
+$\tau$ & $\widehat{E\left(\beta\right)}$ & $\widehat{MSE\left(\beta\right)}$ & Coverage Probability\tabularnewline
+\midrule
+\midrule 
+0.25 & 0.5256 & 0.0022 & 0.1\tabularnewline
+\midrule 
+0.5 & 0.4763 & 0.0052 & 0.3\tabularnewline
+\midrule 
+0.75 & 0.4490 & 0.0097 & 0.3\tabularnewline
+\bottomrule
+\end{tabular}
+\par\end{centering}
+\caption{Simulation results for scenario B for various values of $\tau$ are
+considered, with $n_{1}=n_{2}=80$. Means and MSEs of $\hat{\beta}=E(\beta\mid data)$
+are reported, along with the coverage probability (CP) of the 95\%
+equal-tailed credible interval for $\beta$. The true value is $\beta$
+= 0.5 throughout. }
+\end{table}
+\par\end{center}
+
+\begin{center}
+\begin{table}[H]
+\begin{centering}
+\begin{tabular}{cccc}
+\toprule 
+$\tau$ & $\widehat{E\left(X\right)}$ & $\sqrt{\widehat{Var\left(X\right)}}$ & Mean distance\tabularnewline
+\midrule
+\midrule 
+0.25 & 1.9094 & 0.2543 & 2.3072\tabularnewline
+\midrule 
+0.5 & 1.9842 & 0.4835 & 8.0644\tabularnewline
+\midrule 
+0.75 & 1.9301 & 0.7559 & 6.4974\tabularnewline
+\bottomrule
+\end{tabular}
+\par\end{centering}
+\caption{Simulation results for scenario B for various values of $\tau$ are
+considered, with $n_{1}=n_{2}=80$. Means and standard deviations
+of $\hat{X}=E(X\mid data)$ are reported, along with the Mean distance
+between the true. $X$ and predicted $X$. }
+\end{table}
+\par\end{center}
+
+\section{Conclusion}
+\begin{itemize}
+\item In Scenario A involving no measurement error, we observe that the
+estimated value of effect $\beta$ of the covariate is close to the
+true value. The estimated Mean squared error of $\beta$ decreases
+as the sample size increases and the posterior of $\beta$ yields
+samples with better accuracy i.e., the effect of covariate can be
+prominently observed as the sample size increases.
+\item Scenario B involves measurement error for a fixed sample size (reasonably
+large) the estimated Mean squared error of $\beta$ increases as the
+variance of error increases and the expected value of $\beta$ is
+not as close to the true value as in Scenario A. The method results
+in a coverage probability of the covariate effect around 30\% when
+applied on only 10 replicated datasets. It is expected that this probability
+will increase as we increase the number of datasets. 
+\item The mean distance between the true and estimated covariate values
+is quite small and they approximately resemble the distribution of
+the true covariate. Moreover, the estimated covariates from the posterior
+can be used in cases where we need the covariates but do not actually
+have it.
+\end{itemize}
+
+\section{Contribution}
+\begin{itemize}
+\item \textbf{\emph{Soumya Paul:}} Provided theoretical inputs,Writing code
+(25\%), Preparing report(50\%), Presentation (35\%)
+\item \textbf{\emph{Sankhadeep Mitra:}} Finding the paper (50\%), Writing
+code (50\%), Presentation(35\%),Preparing report (25\%) 
+\item \textbf{\emph{Sampriti Dutta:}} Finding the paper (50\%), Writing
+code (25\%),Preparing report(25\%), Presentation (35\%) 
+\end{itemize}
+
+\bibliographystyle{ACM-Reference-Format}
+\nocite{*}
+\bibliography{Citation/BayesCite}
+
+\end{document}

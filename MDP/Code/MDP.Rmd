@@ -1,0 +1,263 @@
+---
+title: "Bayesion Project"
+author: "Soumya, Sampriti, Sankhadeep"
+date: "2023-04-18"
+output: html_document
+---
+# Instruction : We did not use any for loop for 10 replicated datasets. Please run chunk 1 to chunk 3 one time, chunk 4 to chunk 14 10 times, and the last chunk for final result. 
+```{r}
+suppressWarnings(rm(list = ls())) 
+
+n <- 30   # no. of individuals
+n_rep <- 10   # no. of replications
+S <- 10000 # no of iterations in MCMC
+
+# For simulation of X from normal distribution
+Mu <- 2
+Tau <- 0.25
+
+# For generating D given X
+Alpha <- -3
+beta <- 0.5
+
+```
+# For iteration purpose
+```{r}
+c <- 0
+iter <- 0
+mean_beta <- c()
+sd_beta <- c()
+mse_beta <- c()
+mean_x_hat <- c()
+var_x_hat <- c()
+mean_dist <- c()
+
+```
+# returns D = 0 or 1, based on X
+```{r}
+D_func <- function(Alpha, beta, x){
+  p <- 1 / (1 + exp(Alpha + beta*exp(x)))
+  d <- 0
+  if(p <= 0.5)
+    d <- 1
+  return(d)
+}
+
+```
+# Simualtion of X and D
+```{r}
+X <- c()      
+D <- c()
+sigma <- Tau
+
+if(Tau == 0){
+  sigma <- 1.08
+}
+
+count_0 <- 0  #Count of 0
+count_1 <- 0  #Count of 1
+
+while(count_0 < n/2) # sampling from X|D=0
+{
+  x <- rnorm(1, mean = Mu, sd = sigma)
+  d <- D_func(Alpha, beta, x)
+  if(d == 0)
+  {
+    X <- c(X, x)
+    D <- c(D, d)
+    count_0 <- count_0 + 1
+  }
+}
+while(count_1 < n/2)  # sampling from X|D=1
+{
+  x <- rnorm(1, mean = Mu, sd = sigma)
+  d <- D_func(Alpha, beta, x)
+  if(d == 1)
+  {
+    X <- c(X, x)
+    D <- c(D, d)
+    count_1 <- count_1 + 1
+  }
+}
+iter <- iter + 1
+
+```
+# Generating the imprecise measurements W
+```{r}
+if(Tau > 0)
+{
+  W <- c()
+  for(i in 1:n)
+  {
+    W <- c(W, rnorm(1, mean = X[i], sd = Tau))
+  }
+}
+
+```
+# Creating grid points
+```{r}
+if(Tau > 0)
+{
+  Z <- seq(min(W) - 2.5*Tau, max(W) + 2.5*Tau, Tau/4)
+  m <- length(Z)  #No of grid points
+
+  suppressWarnings(library(MCMCprecision))
+  lambda <- rdirichlet(1, rep(1, m))   # Sampling from Dirichlet(1, 1, ..., 1)
+}
+
+```
+# pdf values of W|Z[i] to get the prior of X|D
+```{r}
+if(Tau > 0)
+{
+  f <- rep(0, m)
+  for(i in 1:m)
+  {
+    w <- rnorm(1, Z[i], Tau)
+    f[i] <- dnorm(w, Z[i], Tau)
+  }
+
+  # Substitute of original distribution of X|D
+  prob <- rep(0, m)
+  for(i in 1:m)
+  {
+    prob[i] <- (lambda[i] * f[i]) / sum(lambda*f)
+  }
+}
+
+```
+# pmf value of the prior of X|D, at point 'a'
+```{r}
+if(Tau > 0)
+{
+  dist_x <- function(a){
+    ar <- abs(a - Z)
+    pos <- min(which(ar == min(ar)))  
+    return(prob[pos])
+  }
+}
+
+```
+# Log posterior of X
+```{r}
+if(Tau > 0)
+{
+  log_post_X <- function(x){
+    like <- - sum((W - x)^2) / (2* Tau^2)   # likelihood
+    prior <- 0
+    for(i in 1:n)                           # prior
+    {
+      prior <- prior + log(dist_x(x[i]))
+    }
+    post <- like + prior                    # posterior
+    return(post)
+  }
+}
+
+```
+# Metropolis sampling for X, as our candidate distribution is symmetric
+```{r}
+if(Tau > 0)
+{
+  samples_X <- matrix(NA, S, n)    
+  init_X <- W
+  for(i in 1:S)
+  {
+    for(j in 1:n)
+    {
+      can <- init_X
+      can[j] <- rnorm(1, init_X[j], Tau)
+      logR <- log_post_X(can) - log_post_X(init_X)
+      if(log(runif(1)) < logR)
+        init_X <- can
+    }
+    samples_X[i,] <- init_X
+    cat(i,' ')
+  }
+}
+
+```
+# Measures for X
+```{r}
+if(Tau > 0)
+{
+  mean_x <- rep(0,n)
+  var_x <- rep(0,n)
+  for(i in 1:n)
+  {
+    mean_x[i] <- mean(samples_X[(S/5+ 1):S, i])
+    var_x[i] <- sd(samples_X[(S/5 +1):S, i])
+  }
+  # estimated mean & variance of X
+  mean_x_hat <- mean(c(mean_x_hat, mean_x))
+  var_x_hat <- mean(c(var_x_hat, var_x))
+  
+  dist <- sqrt(sum(X - mean_x)^2)
+  mean_dist <- mean(c(mean_dist, dist)) # mean distance between original X & estimated X
+}
+
+```
+# Log posterior of beta
+```{r}
+mu_beta <- 0
+sigma_beta <- 100
+
+log_post_beta <- function(b, d, x){
+  p <- 1 - 1 / (1 + exp(Alpha + b*exp(x)))
+  for(i in 1:n)
+  {
+    if(p[i] == 1){
+      p[i] <- 1 - 1e-4
+    } else if(p[i] == 0){
+      p[i] <- 1e-4
+    }
+  }
+  like <- sum(d*log(p)) + sum((1 - d)*log(1 - p))   # likelihood
+  prior <- - (b - mu_beta)^2 / (2*sigma_beta^2)     # prior
+  post <- like + prior                              # posterior
+  return(post)
+}
+```
+# Metropolis algorithm for beta, as our candidate distribution is symmetric
+```{r}
+samples_beta <- rep(NA, S)
+init_beta <- 50
+beta1 <- init_beta
+for(i in 1:S)
+{
+  can <- rnorm(1, beta1, sigma_beta)
+  if(Tau == 0)
+    logR <- log_post_beta(can, D, X) - log_post_beta(beta1, D, X)
+  else
+    logR <- log_post_beta(can, D, mean_x) - log_post_beta(beta1, D, mean_x)
+  
+  if(log(runif(1)) < logR)
+    beta1 <- can
+  samples_beta[i] <- beta1
+}
+```
+# Mean, MSE and 95% coverage probability of beta_hat
+```{r}
+mean_beta <- c(mean_beta, mean(samples_beta[(S/5 +1):S]))
+sd_beta <- sd(samples_beta[(S/5 +1):S])
+mse_beta <- c(mse_beta, mean((samples_beta[(S/5 +1):S] - beta)^2))
+mean_beta_hat <- mean(mean_beta) # estimated mean of beta
+mse_beta_hat <- mean(mse_beta)   # estimated MSE of beta
+
+low <- mean(samples_beta[(S/5 +1):S]) + qnorm(0.025, 0, 1) * sd_beta/sqrt(4*S/5)
+high <- mean(samples_beta[(S/5 +1):S]) - qnorm(0.025, 0, 1) * sd_beta/sqrt(4*S/5)
+if(beta > low & beta < high)
+  c <- c + 1
+cov_prob <- c/n_rep  # coverage probability of beta
+
+```
+# For printing purpose
+```{r}
+cat('For n =', n, 'and tau =', Tau, '\n')
+cat('Estimated mean of beta =', mean_beta_hat, 'and estimated MSE of beta =',mse_beta_hat,'\n')
+if(Tau > 0){
+  cat('95% coverage probability of beta, for 10 replicated data sets =',cov_prob, '\n')
+}
+cat('Estimated mean of X =', mean_x_hat, ', estimated variance of X =',var_x_hat,'and mean distance between the true X and estimated X =', mean_dist, '\n')
+
+```

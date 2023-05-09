@@ -1,0 +1,19 @@
+The instructions are given in the .Rmd file
+
+
+-------------------------------------------------------------------------
+
+1. Run Chunk 1 to Chunk 3 one time
+
+2. Run chunk 4 to chunk 14 10 times 
+
+3. Run Chunk 15 to get the final result
+
+4. Change the values of the parameters accordingly
+	
+Scenario A
+	I) N=30,60,120
+	II) tau=0
+Scenario B
+	I) N=160
+	II) tau=0.25, 0.5, 0.75
